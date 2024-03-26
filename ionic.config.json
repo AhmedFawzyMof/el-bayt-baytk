@@ -1,0 +1,7 @@
+{
+  "name": "El Bayt Baytk",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
