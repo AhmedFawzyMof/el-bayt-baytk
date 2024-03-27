@@ -1,5 +1,5 @@
 <template>
-  <ion-header :translucent="true">
+  <ion-header :translucent="false">
     <ion-toolbar>
       <ion-searchbar
         show-clear-button="always"
