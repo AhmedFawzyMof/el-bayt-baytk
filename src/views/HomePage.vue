@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header />
+    <Header></Header>
     <ion-content :fullscreen="true">
       <div id="container">
         <strong>Ready to create an app?</strong>
