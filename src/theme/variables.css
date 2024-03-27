@@ -83,6 +83,14 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 }
+
+ion-content {
+  --offset-height: calc(
+    var(--ion-safe-area-top, 20px) + var(--ion-safe-area-bottom, 22px)
+  );
+  height: calc(100vh - var(--offset-height));
+}
+
 /* 
 @media (prefers-color-scheme: dark) {
 
