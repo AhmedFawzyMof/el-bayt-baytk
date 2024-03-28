@@ -93,6 +93,9 @@ export default {
     IonContent,
     IonTitle,
     IonToolbar,
+    IonHeader,
+    IonList,
+    IonItem,
   },
   data() {
     return {
