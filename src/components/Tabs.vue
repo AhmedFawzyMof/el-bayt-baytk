@@ -72,6 +72,8 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
+  IonList,
+  IonItem,
   menuController,
 } from "@ionic/vue";
 
