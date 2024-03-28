@@ -1,6 +1,5 @@
 <template>
   <ion-page>
-    <Header></Header>
     <ion-content :fullscreen="true">
       <div id="container">
         <strong>Ready to create an app?</strong>
@@ -20,7 +19,6 @@
 
 <script setup lang="ts">
 import { IonContent, IonPage } from "@ionic/vue";
-import Header from "@/components/Header.vue";
 </script>
 
 <style scoped>
