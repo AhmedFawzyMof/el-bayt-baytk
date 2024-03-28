@@ -1,5 +1,18 @@
 <template>
   <ion-page>
+    <ion-header :translucent="false">
+      <ion-toolbar>
+        <ion-searchbar
+          show-clear-button="always"
+          :clear-icon="trash"
+          autocapitalize="sentences"
+        >
+        </ion-searchbar>
+        <ion-router-link href="/" slot="start">
+          <ion-img src="/assets/icon/logo.png" class="logoImg"></ion-img>
+        </ion-router-link>
+      </ion-toolbar>
+    </ion-header>
     <ion-content :fullscreen="true">
       <div id="container">
         <strong>Ready to create an app?</strong>
@@ -18,7 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import { IonContent, IonPage } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonSearchbar,
+  IonImg,
+} from "@ionic/vue";
+import { trash } from "ionicons/icons";
 </script>
 
 <style scoped>

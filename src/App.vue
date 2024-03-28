@@ -1,25 +1,11 @@
 <template>
   <ion-app>
-    <ion-header :translucent="false">
-      <ion-toolbar>
-        <ion-searchbar
-          show-clear-button="always"
-          :clear-icon="trash"
-          autocapitalize="sentences"
-        >
-        </ion-searchbar>
-        <ion-router-link href="/" slot="start">
-          <ion-img src="/assets/icon/logo.png" class="logoImg"></ion-img>
-        </ion-router-link>
-      </ion-toolbar>
-    </ion-header>
     <ion-router-outlet />
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
-import { trash } from "ionicons/icons";
 </script>
 <style>
 .closeBtn {
