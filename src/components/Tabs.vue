@@ -8,14 +8,14 @@
           <ion-label>Menu</ion-label>
         </ion-tab-button>
 
-        <!-- <ion-tab-button tab="search" href="/search">
+        <ion-tab-button tab="search" href="/search">
           <ion-icon :icon="search" />
           <ion-label>Search</ion-label>
-        </ion-tab-button> -->
+        </ion-tab-button>
 
-        <ion-tab-button tab="radio" href="/radio">
-          <ion-icon :icon="heart" />
-          <ion-label>Favourite</ion-label>
+        <ion-tab-button tab="category" href="/category">
+          <ion-icon :icon="time"></ion-icon>
+          <ion-label>History</ion-label>
         </ion-tab-button>
 
         <ion-tab-button tab="home" href="/home">
@@ -48,9 +48,6 @@
           <ion-item>
             <ion-label>Products</ion-label>
           </ion-item>
-          <ion-item>
-            <ion-label>Order History</ion-label>
-          </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>
@@ -77,7 +74,7 @@ import {
   menuController,
 } from "@ionic/vue";
 
-import { home, heart, menu, close } from "ionicons/icons";
+import { home, menu, close, search, time } from "ionicons/icons";
 
 export default {
   components: {
@@ -100,9 +97,10 @@ export default {
   data() {
     return {
       home,
-      heart,
       menu,
       close,
+      search,
+      time,
     };
   },
   methods: {
@@ -116,5 +114,8 @@ export default {
 ion-menu-toggle i {
   color: #dc2626;
   font-size: 30px;
+}
+.bx-category {
+  font-size: 25px;
 }
 </style>

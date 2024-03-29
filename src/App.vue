@@ -11,21 +11,28 @@ import { IonApp, IonRouterOutlet } from "@ionic/vue";
 .closeBtn {
   font-size: 30px;
 }
-.cart {
-  font-size: 25px;
-}
-.cartBtn {
-  height: 48px;
-  width: 48px;
-}
-.badge {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-}
+
 .logoImg {
   width: 40px;
   height: 40px;
+}
+.cart {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  right: 5px;
+  top: -5px;
+}
+
+.FavIcon {
+  font-size: 30px;
+  margin-right: 10px;
+}
+.CartIcon {
+  font-size: 30px;
+  margin-right: 10px;
 }
 ion-searchbar {
   --background: var(

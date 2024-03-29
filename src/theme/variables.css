@@ -2,6 +2,9 @@
 http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 :root {
   /** primary **/
   --ion-color-primary: #dc2626;
@@ -89,6 +92,10 @@ ion-content {
     var(--ion-safe-area-top, 20px) + var(--ion-safe-area-bottom, 22px)
   );
   height: calc(100vh - var(--offset-height));
+}
+
+* {
+  font-family: Cairo, Roboto;
 }
 
 /* 
