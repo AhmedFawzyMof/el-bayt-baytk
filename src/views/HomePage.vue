@@ -15,7 +15,7 @@
           <ion-card-header>
             <ion-img
               :src="
-                'https://h-a-stroe-backend.onrender.comassets' + category.img
+                'https://h-a-stroe-backend.onrender.com/assets' + category.img
               "
               class="categoryImg"
             ></ion-img>

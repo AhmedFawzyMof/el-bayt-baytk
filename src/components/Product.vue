@@ -2,7 +2,7 @@
   <ion-card class="productCard" @click="GoTo(product!.slug)">
     <img
       :alt="product!.name"
-      :src="'https://h-a-stroe-backend.onrender.comassets' + product!.image"
+      :src="'https://h-a-stroe-backend.onrender.com/assets' + product!.image"
     />
     <ion-card-header>
       <ion-card-title>{{ product!.name }}</ion-card-title>
