@@ -6,7 +6,7 @@
     >
       <div class="slide" v-for="slide in slides" :key="slide.id">
         <img
-          :src="'https://h-a-stroe-backend.onrender.comassets' + slide.image"
+          :src="'https://h-a-stroe-backend.onrender.com/assets' + slide.image"
         />
       </div>
     </div>
@@ -16,7 +16,7 @@
 <script lang="ts">
 import { IonIcon } from "@ionic/vue";
 import { defineComponent } from "vue";
-
+import axios from "axios";
 interface Slide {
   id: number;
   image: string;
@@ -45,10 +45,10 @@ export default defineComponent({
   },
   methods: {
     async GetOffers() {
-      let response = await fetch(
-        "https://h-a-stroe-backend.onrender.comoffers"
+      let response = await axios.get(
+        "https://h-a-stroe-backend.onrender.com/offers"
       );
-      let dataOffer = await response.json();
+      let dataOffer = await response.data;
       this.slides = dataOffer.Offers;
       console.log(dataOffer);
     },

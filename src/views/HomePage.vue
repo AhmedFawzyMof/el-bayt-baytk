@@ -34,18 +34,6 @@
           <ion-button @click="GetMore(4)" color="primary">Show More</ion-button>
         </ion-buttons>
       </div>
-      <!-- <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>
-          Start with Ionic
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://ionicframework.com/docs/components"
-            >UI Components</a
-          >
-        </p>
-      </div> -->
     </ion-content>
   </ion-page>
 </template>
@@ -60,6 +48,8 @@ import {
   IonPage,
   IonImg,
 } from "@ionic/vue";
+
+import axios from "axios";
 
 import Header from "@/components/Header.vue";
 import Carousel from "@/components/Carousel.vue";
@@ -96,22 +86,18 @@ const state = reactive({
 
 async function GetData() {
   try {
-    let resProduct = await fetch(
-      "https://h-a-stroe-backend.onrender.comallproducts"
+    let resProduct = await axios.get(
+      "https://h-a-stroe-backend.onrender.com/allproducts"
     );
-    let resCategory = await fetch(
-      "https://h-a-stroe-backend.onrender.comallcategories"
+    let resCategory = await axios.get(
+      "https://h-a-stroe-backend.onrender.com/allcategories"
     );
 
-    if (!resProduct.ok && !resCategory.ok) {
-      isOpen.value = true;
-    } else {
-      let dataProduct = await resProduct.json();
-      let dataCategory = await resCategory.json();
-      state.Products = dataProduct.Products as Product[];
-      state.slicedProducts = state.Products.slice(0, 4);
-      state.Categories = dataCategory.Categories as Category[];
-    }
+    let dataProduct = await resProduct.data;
+    let dataCategory = await resCategory.data;
+    state.Products = dataProduct.Products as Product[];
+    state.slicedProducts = state.Products.slice(0, 4);
+    state.Categories = dataCategory.Categories as Category[];
   } catch (err) {
     isOpen.value = true;
   }
