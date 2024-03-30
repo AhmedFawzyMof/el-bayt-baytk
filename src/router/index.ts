@@ -15,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "home",
         component: () => import("../views/HomePage.vue"),
       },
+      {
+        path: "product/:slug", // Add this route for product details
+        component: () => import("../views/ProductDetails.vue"),
+        props: true, // This allows you to use the `slug` parameter as a prop in your component
+      },
     ],
   },
 ];

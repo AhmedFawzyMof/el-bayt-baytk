@@ -9,15 +9,17 @@
     ></ion-alert>
     <Header pagename="El Bayt Baytk"></Header>
     <ion-content :fullscreen="true">
-      <Carousel :autoplay="true" :interval="2000"></Carousel>
+      <Carousel :autoplay="true" :interval="2500"></Carousel>
       <div class="categories">
         <ion-card v-for="category in state.Categories">
           <ion-card-header>
             <ion-img
-              :src="'http://localhost:5500/assets' + category.img"
+              :src="
+                'https://h-a-stroe-backend.onrender.comassets' + category.img
+              "
               class="categoryImg"
             ></ion-img>
-            <ion-card-subtitle>{{ category.name }}</ion-card-subtitle>
+            <ion-card-title>{{ category.name }}</ion-card-title>
           </ion-card-header>
         </ion-card>
       </div>
@@ -53,7 +55,7 @@ import {
   IonAlert,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
+  IonCardTitle,
   IonContent,
   IonPage,
   IonImg,
@@ -94,8 +96,12 @@ const state = reactive({
 
 async function GetData() {
   try {
-    let resProduct = await fetch("http://localhost:5500/allproducts");
-    let resCategory = await fetch("http://localhost:5500/allcategories");
+    let resProduct = await fetch(
+      "https://h-a-stroe-backend.onrender.comallproducts"
+    );
+    let resCategory = await fetch(
+      "https://h-a-stroe-backend.onrender.comallcategories"
+    );
 
     if (!resProduct.ok && !resCategory.ok) {
       isOpen.value = true;
@@ -133,12 +139,19 @@ GetMore(0);
 .categories {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  gap: 10px;
 }
 
-.categories ion-card-subtitle {
+.categories ion-card {
+  width: 100%;
+  height: 100%;
+}
+
+.categories ion-card-title {
   text-align: center;
-  font-weight: bold;
-  color: #333;
+  font-size: 15px;
+  text-transform: capitalize;
 }
 .categoryImg {
   width: 70px;

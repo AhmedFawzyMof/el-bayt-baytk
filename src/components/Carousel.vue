@@ -4,17 +4,23 @@
       class="slides"
       :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
     >
-      <div class="slide" v-for="(slide, index) in slides" :key="index">
-        <p>{{ slide }}</p>
+      <div class="slide" v-for="slide in slides" :key="slide.id">
+        <img
+          :src="'https://h-a-stroe-backend.onrender.comassets' + slide.image"
+        />
       </div>
     </div>
   </div>
-  <button @click="previousSlide">Previous</button>
-  <button @click="nextSlide">Next</button>
 </template>
 
 <script lang="ts">
+import { IonIcon } from "@ionic/vue";
 import { defineComponent } from "vue";
+
+interface Slide {
+  id: number;
+  image: string;
+}
 
 export default defineComponent({
   name: "Carousel",
@@ -22,9 +28,12 @@ export default defineComponent({
     autoplay: Boolean,
     interval: Number,
   },
+  components: {
+    IonIcon,
+  },
   data() {
     return {
-      slides: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      slides: [] as Slide[],
       currentSlide: 0,
       slideInterval: null as NodeJS.Timeout | null,
     };
@@ -35,6 +44,14 @@ export default defineComponent({
     },
   },
   methods: {
+    async GetOffers() {
+      let response = await fetch(
+        "https://h-a-stroe-backend.onrender.comoffers"
+      );
+      let dataOffer = await response.json();
+      this.slides = dataOffer.Offers;
+      console.log(dataOffer);
+    },
     nextSlide() {
       this.currentSlide = (this.currentSlide + 1) % this.slides.length;
     },
@@ -53,6 +70,7 @@ export default defineComponent({
     if (this.autoplay) {
       this.startSlideShow();
     }
+    this.GetOffers();
   },
 });
 </script>
@@ -65,10 +83,19 @@ export default defineComponent({
 .slides {
   display: flex;
   transition: transform 0.3s ease-in-out;
+  margin: 15px 0;
 }
 
 .slide {
   flex: 0 0 100%;
   text-align: center;
+  height: 175px;
+  overflow: hidden;
+}
+
+.slide img {
+  height: 100%;
+  width: 95%;
+  border-radius: 10px;
 }
 </style>
