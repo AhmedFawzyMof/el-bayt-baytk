@@ -31,7 +31,9 @@
         ></Product>
 
         <ion-buttons v-if="!state.noMore">
-          <ion-button @click="GetMore(4)" color="primary">Show More</ion-button>
+          <ion-button @click="GetMore(4)" class="showMore">
+            Show More
+          </ion-button>
         </ion-buttons>
       </div>
     </ion-content>
@@ -47,6 +49,8 @@ import {
   IonContent,
   IonPage,
   IonImg,
+  IonButton,
+  IonButtons,
 } from "@ionic/vue";
 
 import axios from "axios";
@@ -127,6 +131,7 @@ GetMore(0);
   grid-template-columns: repeat(3, 1fr);
   place-items: center;
   gap: 10px;
+  padding: 10px;
 }
 
 .categories ion-card {
@@ -148,5 +153,15 @@ GetMore(0);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+  margin-bottom: 20px;
+}
+.showMore {
+  width: 150px;
+  height: 50px;
+  margin: 10px 0;
+  background: var(--ion-color-primary);
+  color: #fff;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 </style>
