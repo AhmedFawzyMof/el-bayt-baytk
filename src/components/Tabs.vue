@@ -13,7 +13,7 @@
           <ion-label>Search</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="category" href="/category">
+        <ion-tab-button tab="category" href="/history">
           <ion-icon :icon="time"></ion-icon>
           <ion-label>History</ion-label>
         </ion-tab-button>
@@ -34,7 +34,7 @@
       <ion-content>
         <ion-list line="inset">
           <ion-item>
-            <ion-label>Category</ion-label>
+            <ion-label @click="Goto('/categories')">Categories</ion-label>
           </ion-item>
           <ion-item>
             <ion-label>Tags</ion-label>
@@ -104,6 +104,9 @@ export default {
     };
   },
   methods: {
+    Goto(url: string) {
+      this.$router.push(url);
+    },
     openMenu() {
       menuController.open();
     },
@@ -117,5 +120,8 @@ ion-menu-toggle i {
 }
 .bx-category {
   font-size: 25px;
+}
+ion-label {
+  cursor: pointer;
 }
 </style>

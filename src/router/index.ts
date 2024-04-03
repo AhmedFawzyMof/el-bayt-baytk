@@ -20,6 +20,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/ProductDetails.vue"),
         props: true, // This allows you to use the `slug` parameter as a prop in your component
       },
+      {
+        path: "categories",
+        component: () => import("../views/Categories.vue"),
+      },
     ],
   },
 ];

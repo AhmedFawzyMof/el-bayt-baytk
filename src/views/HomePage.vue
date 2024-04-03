@@ -8,33 +8,57 @@
       :buttons="alertButtons"
     ></ion-alert>
     <Header pagename="El Bayt Baytk"></Header>
-    <ion-content :fullscreen="true">
-      <Carousel :autoplay="true" :interval="2500"></Carousel>
-      <div class="categories">
-        <ion-card v-for="category in state.Categories">
-          <ion-card-header>
-            <ion-img
-              :src="
-                'https://h-a-stroe-backend.onrender.com/assets' + category.img
-              "
-              class="categoryImg"
-            ></ion-img>
-            <ion-card-title>{{ category.name }}</ion-card-title>
-          </ion-card-header>
+    <ion-content class="homePage">
+      <div class="carousel">
+        <div
+          class="slides"
+          :style="{ transform: `translateX(-${state.currentSlide * 100}%)` }"
+        >
+          <div class="slide" v-for="slide in state.Carousel" :key="slide.id">
+            <img :src="slide.image" />
+          </div>
+        </div>
+        <button @click="nextSlide()" class="nextBtn">
+          <i class="bx bx-chevron-right"></i>
+        </button>
+        <button @click="prevSlide()" class="prevBtn">
+          <i class="bx bx-chevron-left"></i>
+        </button>
+      </div>
+      <div class="firstOffersDiv" id="OfferDiv">
+        <ion-card v-for="offer in state.Offers" :key="offer.id">
+          <p>{{ offer.name }}</p>
+          <ion-img :src="offer.image" :alt="offer.name"></ion-img>
         </ion-card>
       </div>
-      <h1 style="padding-left: 10px">Most Popular</h1>
-      <div class="product-container">
-        <Product
-          v-for="product in state.slicedProducts"
-          :product="product"
-        ></Product>
-
-        <ion-buttons v-if="!state.noMore">
-          <ion-button @click="GetMore(4)" class="showMore">
-            Show More
-          </ion-button>
-        </ion-buttons>
+      <div class="subcategories">
+        <div class="subcategory" v-for="category in state.Categories">
+          <ion-card>
+            <ion-card-header>
+              <h2 style="font-size: 17px">
+                {{ category.name }}
+              </h2>
+            </ion-card-header>
+            <ion-card-content
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"
+            >
+              <div
+                class="subcategorydiv"
+                v-for="subcategory in category.subcategories"
+                :key="subcategory.id"
+              >
+                <ion-img
+                  :src="subcategory.image"
+                  :alt="subcategory.name"
+                  style="border-radius: 5px; overflow: hidden"
+                >
+                </ion-img>
+                <p>{{ subcategory.name }}</p>
+              </div>
+              <ion-button>View All</ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -45,123 +69,191 @@ import {
   IonAlert,
   IonCard,
   IonCardHeader,
-  IonCardTitle,
+  IonCardContent,
   IonContent,
   IonPage,
   IonImg,
   IonButton,
-  IonButtons,
 } from "@ionic/vue";
 
 import axios from "axios";
 
 import Header from "@/components/Header.vue";
-import Carousel from "@/components/Carousel.vue";
-import Product from "@/components/Product.vue";
 
 import { reactive, ref } from "vue";
 
 const alertButtons = ["OK"];
 const isOpen = ref(false);
 
-interface Product {
+interface Slide {
   id: number;
-  slug: string;
-  name: string;
-  nameAr: string;
-  description: string;
-  descriptionAr: string;
-  price: number;
-  discount: number;
   image: string;
+  product: object;
+}
+
+interface Offer {
+  id: number;
+  name: string;
+  image: string;
+  subcategory: number;
+}
+
+interface SubCategory {
+  id: number;
+  name: string;
+  image: string;
+  category_id: number;
+  category_name: string;
+  category_name_ar: string;
+  name_ar: string;
 }
 
 interface Category {
   name: string;
-  img: string;
+  name_ar: string;
+  subcategories: SubCategory[];
 }
 
 const state = reactive({
-  Products: [] as Product[],
-  slicedProducts: [] as Product[],
+  Offers: [] as Offer[],
   Categories: [] as Category[],
-  noMore: false,
+  Carousel: [] as Slide[],
+  currentSlide: 0,
+  slideInterval: null as NodeJS.Timeout | null,
 });
 
 async function GetData() {
   try {
-    let resProduct = await axios.get(
-      "https://h-a-stroe-backend.onrender.com/allproducts"
-    );
-    let resCategory = await axios.get(
-      "https://h-a-stroe-backend.onrender.com/allcategories"
-    );
+    let response = await axios.get("http://localhost:5500/api/home");
+    state.Offers = response.data.Offers;
+    state.Carousel = response.data.Carousels;
+    let categories: Category[] = [];
+    let subcategories: SubCategory[] = response.data.SubCategories;
 
-    let dataProduct = await resProduct.data;
-    let dataCategory = await resCategory.data;
-    state.Products = dataProduct.Products as Product[];
-    state.slicedProducts = state.Products.slice(0, 4);
-    state.Categories = dataCategory.Categories as Category[];
+    for (let i = 0; i < subcategories.length; i++) {
+      const subcategory = subcategories[i];
+
+      let category = categories.find((sub: any) => {
+        return subcategory.category_name == sub.name;
+      });
+
+      if (!category) {
+        categories.push({
+          name: subcategory.category_name,
+          name_ar: subcategory.category_name_ar,
+          subcategories: [subcategory],
+        });
+      } else {
+        category.subcategories.push(subcategory);
+      }
+    }
+
+    state.Categories = categories;
   } catch (err) {
     isOpen.value = true;
+    console.log(err);
   }
 }
 
-function GetMore(plus: number) {
-  state.slicedProducts = state.Products.slice(
-    0,
-    state.slicedProducts.length + plus
-  );
+function nextSlide() {
+  state.currentSlide = (state.currentSlide + 1) % state.Carousel.length;
 
-  if (plus !== 0) {
-    if (state.slicedProducts.length === state.Products.length) {
-      state.noMore = true;
-    }
-  }
+  stopSlideShow();
+
+  setTimeout(() => {
+    state.slideInterval = setInterval(nextSlide, 3000);
+  }, 2000);
+}
+function prevSlide() {
+  state.currentSlide =
+    (state.currentSlide - 1 + state.Carousel.length) % state.Carousel.length;
+
+  stopSlideShow();
+
+  setTimeout(() => {
+    state.slideInterval = setInterval(nextSlide, 3000);
+  }, 2000);
+}
+function startSlideShow() {
+  state.slideInterval = setInterval(nextSlide, 3000);
+}
+function stopSlideShow() {
+  clearInterval(state.slideInterval as unknown as number);
 }
 
 GetData();
-
-GetMore(0);
+startSlideShow();
 </script>
 
 <style scoped>
-.categories {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  place-items: center;
-  gap: 10px;
-  padding: 10px;
-}
-
-.categories ion-card {
-  width: 100%;
-  height: 100%;
-}
-
-.categories ion-card-title {
-  text-align: center;
-  font-size: 15px;
-  text-transform: capitalize;
-}
-.categoryImg {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto;
-}
-.product-container {
+#OfferDiv {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
+  position: relative;
 }
-.showMore {
-  width: 150px;
-  height: 50px;
-  margin: 10px 0;
-  background: var(--ion-color-primary);
+
+#OfferDiv p {
+  position: absolute;
   color: #fff;
-  border-radius: 5px;
-  margin-left: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: bold;
+}
+.homePage {
+  background-color: var(--ion-color-bg);
+}
+
+.carousel {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  margin: 15px 0;
+}
+
+.slide {
+  flex: 0 0 100%;
+  text-align: center;
+  height: 175px;
+  overflow: hidden;
+}
+
+.slide img {
+  height: 100%;
+  width: 95%;
+  border-radius: 10px;
+}
+
+.nextBtn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  z-index: 99;
+  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px #33333368;
+  transform: translateY(-50%);
+  background-color: var(--ion-color-primary);
+}
+.prevBtn {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  z-index: 99;
+  font-size: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 0 2px #33333368;
+  transform: translateY(-50%);
+  background-color: var(--ion-color-primary);
 }
 </style>
