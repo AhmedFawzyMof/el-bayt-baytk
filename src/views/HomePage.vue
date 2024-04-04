@@ -26,10 +26,12 @@
         </button>
       </div>
       <div class="firstOffersDiv" id="OfferDiv">
-        <ion-card v-for="offer in state.Offers" :key="offer.id">
-          <p>{{ offer.name }}</p>
-          <ion-img :src="offer.image" :alt="offer.name"></ion-img>
-        </ion-card>
+        <div class="Offer">
+          <ion-card v-for="offer in state.Offers" :key="offer.id">
+            <p>{{ offer.name }}</p>
+            <ion-img :src="offer.image" :alt="offer.name"></ion-img>
+          </ion-card>
+        </div>
       </div>
       <div class="subcategories">
         <div class="subcategory" v-for="category in state.Categories">
@@ -124,7 +126,9 @@ const state = reactive({
 
 async function GetData() {
   try {
-    let response = await axios.get("http://localhost:5500/api/home");
+    let response = await axios.get(
+      "https://h-a-stroe-backend.onrender.com/api/home"
+    );
     state.Offers = response.data.Offers;
     state.Carousel = response.data.Carousels;
     let categories: Category[] = [];
@@ -187,9 +191,10 @@ startSlideShow();
 
 <style scoped>
 #OfferDiv {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  width: 95%;
+  overflow: scroll;
   position: relative;
+  margin: 0 auto;
 }
 
 #OfferDiv p {
@@ -201,6 +206,20 @@ startSlideShow();
   font-size: 12px;
   font-weight: bold;
 }
+
+.Offer {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  margin: 15px 0;
+}
+
+.Offer ion-card {
+  flex: 0 0 120px;
+  text-align: center;
+  height: 120px;
+  overflow: hidden;
+}
+
 .homePage {
   background-color: var(--ion-color-bg);
 }
@@ -241,7 +260,8 @@ startSlideShow();
   border-radius: 50%;
   box-shadow: 0 0 2px #33333368;
   transform: translateY(-50%);
-  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary);
+  background: none;
 }
 .prevBtn {
   position: absolute;
@@ -254,6 +274,7 @@ startSlideShow();
   border-radius: 50%;
   box-shadow: 0 0 2px #33333368;
   transform: translateY(-50%);
-  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary);
+  background: none;
 }
 </style>
