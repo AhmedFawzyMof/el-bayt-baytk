@@ -25,7 +25,7 @@
           <i class="bx bx-chevron-left"></i>
         </button>
       </div>
-      <div class="firstOffersDiv" id="OfferDiv">
+      <div class="OfferDiv">
         <div class="Offer">
           <ion-card v-for="offer in state.Offers" :key="offer.id">
             <p>{{ offer.name }}</p>
@@ -42,7 +42,14 @@
               </h2>
             </ion-card-header>
             <ion-card-content
-              style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                place-items: center;
+                padding-right: 10px;
+                padding-left: 10px;
+              "
             >
               <div
                 class="subcategorydiv"
@@ -52,13 +59,18 @@
                 <ion-img
                   :src="subcategory.image"
                   :alt="subcategory.name"
-                  style="border-radius: 5px; overflow: hidden"
+                  style="border-radius: 5px; overflow: hidden; max-width: 325px"
                 >
                 </ion-img>
                 <p>{{ subcategory.name }}</p>
               </div>
-              <ion-button>View All</ion-button>
             </ion-card-content>
+            <ion-button
+              @click="goToCategory(category.id)"
+              style="margin-left: 20px; width: 120px; margin-bottom: 10px"
+            >
+              View All
+            </ion-button>
           </ion-card>
         </div>
       </div>
@@ -77,12 +89,12 @@ import {
   IonImg,
   IonButton,
 } from "@ionic/vue";
-
 import axios from "axios";
 
 import Header from "@/components/Header.vue";
 
 import { reactive, ref } from "vue";
+import router from "@/router";
 
 const alertButtons = ["OK"];
 const isOpen = ref(false);
@@ -111,6 +123,7 @@ interface SubCategory {
 }
 
 interface Category {
+  id: number;
   name: string;
   name_ar: string;
   subcategories: SubCategory[];
@@ -126,9 +139,7 @@ const state = reactive({
 
 async function GetData() {
   try {
-    let response = await axios.get(
-      "https://h-a-stroe-backend.onrender.com/api/home"
-    );
+    let response = await axios.get("http://localhost:5500/api/home");
     state.Offers = response.data.Offers;
     state.Carousel = response.data.Carousels;
     let categories: Category[] = [];
@@ -143,6 +154,7 @@ async function GetData() {
 
       if (!category) {
         categories.push({
+          id: subcategory.category_id,
           name: subcategory.category_name,
           name_ar: subcategory.category_name_ar,
           subcategories: [subcategory],
@@ -155,8 +167,11 @@ async function GetData() {
     state.Categories = categories;
   } catch (err) {
     isOpen.value = true;
-    console.log(err);
   }
+}
+
+function goToCategory(id: number) {
+  router.push({ path: `/categories/${id}` });
 }
 
 function nextSlide() {
@@ -190,14 +205,14 @@ startSlideShow();
 </script>
 
 <style scoped>
-#OfferDiv {
+.OfferDiv {
   width: 95%;
   overflow: scroll;
   position: relative;
   margin: 0 auto;
 }
 
-#OfferDiv p {
+.OfferDiv p {
   position: absolute;
   color: #fff;
   top: 50%;
@@ -276,5 +291,35 @@ startSlideShow();
   transform: translateY(-50%);
   color: var(--ion-color-primary);
   background: none;
+}
+
+@media (min-width: 768px) {
+  .subcategories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .slide {
+    height: 275px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .subcategories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .OfferDiv {
+    overflow: hidden;
+  }
+  .Offer {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1300px) {
+  .subcategories {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

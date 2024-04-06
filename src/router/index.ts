@@ -24,6 +24,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "categories",
         component: () => import("../views/Categories.vue"),
       },
+      {
+        path: "categories/:id",
+        component: () => import("../views/ProductsByCategories.vue"),
+      },
     ],
   },
 ];

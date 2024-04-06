@@ -21,9 +21,7 @@
         <ion-row>
           <ion-img
             class="productImg"
-            :src="
-              'https://h-a-stroe-backend.onrender.com/assets' + Product.image
-            "
+            :src="'http://localhost:5500/assets' + Product.image"
             :alt="Product.name"
           ></ion-img>
         </ion-row>
@@ -80,9 +78,7 @@ export default defineComponent({
   methods: {
     async GetProduct() {
       let slug = this.$route.params.slug;
-      let response = await axios.get(
-        "https://h-a-stroe-backend.onrender.com/products/" + slug
-      );
+      let response = await axios.get("http://localhost:5500/products/" + slug);
       console.log(response.data.Products);
       this.Product = response.data.Products;
     },
