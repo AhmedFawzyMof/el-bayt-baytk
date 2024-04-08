@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/HomePage.vue"),
       },
       {
-        path: "product/:slug", // Add this route for product details
+        path: "product/:id", // Add this route for product details
         component: () => import("../views/ProductDetails.vue"),
         props: true, // This allows you to use the `slug` parameter as a prop in your component
       },
@@ -27,6 +27,18 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "categories/:id",
         component: () => import("../views/ProductsByCategories.vue"),
+      },
+      {
+        path: "subcategory/:id",
+        component: () => import("../views/ProductsBySubCategory.vue"),
+      },
+      {
+        path: "about",
+        component: () => import("../views/AboutPage.vue"),
+      },
+      {
+        path: "contact",
+        component: () => import("../views/ContactPage.vue"),
       },
     ],
   },

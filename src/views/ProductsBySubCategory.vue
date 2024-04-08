@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header :pagename="Category.name" />
+    <Header :pagename="Subcategory.name" />
     <ion-alert
       :is-open="isOpen"
       :header="alertHeader"
@@ -8,26 +8,9 @@
       :buttons="alertButtons"
     ></ion-alert>
     <ion-content>
-      <div class="subCategories">
-        <div
-          class="subCategory"
-          v-for="subcategory in SubCategories"
-          @click="GoTo(`/subcategory/${subcategory.id}`)"
-          style="cursor: pointer"
-        >
-          <ion-card>
-            <ion-img :src="subcategory.image"></ion-img>
-          </ion-card>
-          <p style="margin-left: 10px">{{ subcategory.name }}</p>
-        </div>
-      </div>
       <div class="products">
         <div class="product" v-for="product in Products">
-          <ion-card
-            class="productCard"
-            @click="GoTo(`/product/${product.id}`)"
-            style="cursor: pointer"
-          >
+          <ion-card class="productCard" @click="GoTo(`/product/${product.id}`)">
             <img :alt="product!.name" :src=" product!.image" />
             <ion-card-header>
               <ion-card-title style="font-size: 17px">{{
@@ -91,12 +74,6 @@ interface Product {
   descriptionAr: string;
 }
 
-interface Category {
-  id: number;
-  name: string;
-  nameAr: string;
-}
-
 export default defineComponent({
   name: "ProductsByCategories",
   components: {
@@ -116,9 +93,8 @@ export default defineComponent({
     return {
       alertMessage: "",
       alertHeader: "",
-      SubCategories: [] as SubCategory[],
+      Subcategory: {} as SubCategory,
       Products: [] as Product[],
-      Category: {} as Category,
       auth: false,
       limit: 20,
       isOpen: false,
@@ -129,14 +105,14 @@ export default defineComponent({
     async GetCategory() {
       const id = this.$route.params.id;
 
-      let category = await axios.get(
-        `http://localhost:5500/api/category/${id}/${this.limit}`
+      let subcategory = await axios.get(
+        `http://localhost:5500/api/subcategory/${id}/${this.limit}`
       );
 
-      this.SubCategories = category.data.SubCategories;
+      console.log(subcategory);
 
-      this.Products = category.data.Products;
-      this.Category = category.data.Category;
+      this.Subcategory = subcategory.data.SubCategory;
+      this.Products = subcategory.data.Products;
     },
     GoTo(url: string) {
       this.$router.push(url);
@@ -154,7 +130,7 @@ export default defineComponent({
       try {
         this.limit += 20;
         let category = await axios.get(
-          `http://localhost:5500/api/category/${this.$route.params.id}/${this.limit}`
+          `http://localhost:5500/api/subcategory/${this.$route.params.id}/${this.limit}`
         );
         this.Products = [...this.Products, ...category.data.Products];
         setTimeout(() => ev.target.complete(), 500);
@@ -173,14 +149,6 @@ export default defineComponent({
 });
 </script>
 <style>
-.subCategories {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
 .favBtn {
   position: absolute;
   background: #fff;
@@ -195,15 +163,12 @@ export default defineComponent({
   z-index: 100;
 }
 
-.subCategory {
-  max-width: 180px;
-}
 .products {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   place-items: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 .productCard {
   position: relative;

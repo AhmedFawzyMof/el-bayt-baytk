@@ -17,6 +17,7 @@
                 class="subcategorydiv"
                 v-for="subcategory in category.subcategories"
                 :key="subcategory.id"
+                @click="GoTo(`/subcategory/${subcategory.id}`)"
               >
                 <ion-img
                   :src="subcategory.image"
@@ -27,6 +28,12 @@
                 <p>{{ subcategory.name }}</p>
               </div>
             </ion-card-content>
+            <ion-button
+              @click="GoTo(`/categories/${category.id}`)"
+              style="margin-left: 10px; margin-bottom: 10px"
+            >
+              View All
+            </ion-button>
           </ion-card>
         </div>
       </div>
@@ -58,6 +65,7 @@ interface SubCategory {
 }
 
 interface Category {
+  id: number;
   name: string;
   name_ar: string;
   subcategories: SubCategory[];
@@ -100,6 +108,7 @@ export default defineComponent({
 
           if (!category) {
             categories.push({
+              id: subcategory.category_id,
               name: subcategory.category_name,
               name_ar: subcategory.category_name_ar,
               subcategories: [subcategory],
@@ -111,6 +120,9 @@ export default defineComponent({
           this.Categories = categories;
         }
       } catch (err) {}
+    },
+    GoTo(url: string) {
+      this.$router.push(url);
     },
   },
   mounted() {

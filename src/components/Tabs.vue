@@ -37,16 +37,19 @@
             <ion-label @click="Goto('/categories')">Categories</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Tags</ion-label>
+            <ion-label @click="Goto('/contact')">Contact</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Contact</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>About</ion-label>
+            <ion-label @click="Goto('/about')">About</ion-label>
           </ion-item>
           <ion-item>
             <ion-label>Products</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Login</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Register</ion-label>
           </ion-item>
         </ion-list>
       </ion-content>

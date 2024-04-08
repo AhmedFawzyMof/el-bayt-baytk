@@ -55,6 +55,8 @@
                 class="subcategorydiv"
                 v-for="subcategory in category.subcategories"
                 :key="subcategory.id"
+                @click="GoTo(`/subcategory/${subcategory.id}`)"
+                style="cursor: pointer"
               >
                 <ion-img
                   :src="subcategory.image"
@@ -62,12 +64,17 @@
                   style="border-radius: 5px; overflow: hidden; max-width: 325px"
                 >
                 </ion-img>
-                <p>{{ subcategory.name }}</p>
+                <p style="font-size: 12px">{{ subcategory.name }}</p>
               </div>
             </ion-card-content>
             <ion-button
-              @click="goToCategory(category.id)"
-              style="margin-left: 20px; width: 120px; margin-bottom: 10px"
+              @click="GoTo(`/categories/${category.id}`)"
+              style="
+                cursor: pointer;
+                margin-left: 20px;
+                width: 120px;
+                margin-bottom: 10px;
+              "
             >
               View All
             </ion-button>
@@ -170,8 +177,8 @@ async function GetData() {
   }
 }
 
-function goToCategory(id: number) {
-  router.push({ path: `/categories/${id}` });
+function GoTo(url: string) {
+  router.push({ path: url });
 }
 
 function nextSlide() {
