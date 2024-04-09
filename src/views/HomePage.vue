@@ -146,7 +146,9 @@ const state = reactive({
 
 async function GetData() {
   try {
-    let response = await axios.get("http://localhost:5500/api/home");
+    let response = await axios.get(
+      "https://h-a-stroe-backend.onrender.com/api/home"
+    );
     state.Offers = response.data.Offers;
     state.Carousel = response.data.Carousels;
     let categories: Category[] = [];

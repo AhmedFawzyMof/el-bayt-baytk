@@ -94,7 +94,9 @@ export default defineComponent({
     },
     async GetCategories() {
       try {
-        let response = await axios.get("http://localhost:5500/api/categories");
+        let response = await axios.get(
+          "https://h-a-stroe-backend.onrender.com/api/categories"
+        );
 
         let categories: Category[] = [];
         let subcategories: SubCategory[] = response.data.SubCategories;

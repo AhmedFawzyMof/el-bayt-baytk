@@ -106,7 +106,7 @@ export default defineComponent({
       const id = this.$route.params.id;
 
       let subcategory = await axios.get(
-        `http://localhost:5500/api/subcategory/${id}/${this.limit}`
+        `https://h-a-stroe-backend.onrender.com/api/subcategory/${id}/${this.limit}`
       );
 
       console.log(subcategory);
@@ -130,7 +130,7 @@ export default defineComponent({
       try {
         this.limit += 20;
         let category = await axios.get(
-          `http://localhost:5500/api/subcategory/${this.$route.params.id}/${this.limit}`
+          `https://h-a-stroe-backend.onrender.com/api/subcategory/${this.$route.params.id}/${this.limit}`
         );
         this.Products = [...this.Products, ...category.data.Products];
         setTimeout(() => ev.target.complete(), 500);

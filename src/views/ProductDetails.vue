@@ -209,7 +209,9 @@ export default defineComponent({
   methods: {
     async GetProduct() {
       let id = this.$route.params.id;
-      let response = await axios.get("http://localhost:5500/api/product/" + id);
+      let response = await axios.get(
+        "https://h-a-stroe-backend.onrender.com/api/product/" + id
+      );
       console.log(response.data);
       if (response.data.warranty.Valid) {
         this.warranty = true;
