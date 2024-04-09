@@ -40,6 +40,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "contact",
         component: () => import("../views/ContactPage.vue"),
       },
+      {
+        path: "offer/:id",
+        component: () => import("../views/ProductsByOffer.vue"),
+      },
     ],
   },
 ];

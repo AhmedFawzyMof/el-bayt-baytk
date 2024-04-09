@@ -27,7 +27,11 @@
       </div>
       <div class="OfferDiv">
         <div class="Offer">
-          <ion-card v-for="offer in state.Offers" :key="offer.id">
+          <ion-card
+            v-for="offer in state.Offers"
+            :key="offer.id"
+            @click="GoTo(`/offer/${offer.subcategory}`)"
+          >
             <p>{{ offer.name }}</p>
             <ion-img :src="offer.image" :alt="offer.name"></ion-img>
           </ion-card>
@@ -174,6 +178,7 @@ async function GetData() {
     }
 
     state.Categories = categories;
+    startSlideShow();
   } catch (err) {
     isOpen.value = true;
   }
@@ -210,7 +215,6 @@ function stopSlideShow() {
 }
 
 GetData();
-startSlideShow();
 </script>
 
 <style scoped>

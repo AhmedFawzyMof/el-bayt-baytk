@@ -75,7 +75,7 @@ interface Product {
 }
 
 export default defineComponent({
-  name: "ProductsBySubCategory",
+  name: "ProductsByOffers",
   components: {
     Header,
     IonPage,
@@ -106,7 +106,7 @@ export default defineComponent({
       const id = this.$route.params.id;
 
       let subcategory = await axios.get(
-        `https://h-a-stroe-backend.onrender.com/api/subcategory/${id}/${this.limit}`
+        `https://h-a-stroe-backend.onrender.com/api/offer/${id}/${this.limit}`
       );
 
       console.log(subcategory);
