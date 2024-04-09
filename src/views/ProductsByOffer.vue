@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <Header :pagename="Subcategory.name" />
+    <Header pagename="Offers" />
     <ion-alert
       :is-open="isOpen"
       :header="alertHeader"
@@ -54,16 +54,6 @@ import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
 import axios from "axios";
 
-interface SubCategory {
-  id: number;
-  name: string;
-  image: string;
-  category_id: number;
-  category_name: string;
-  category_name_ar: string;
-  name_ar: string;
-}
-
 interface Product {
   id: number;
   name: string;
@@ -93,7 +83,6 @@ export default defineComponent({
     return {
       alertMessage: "",
       alertHeader: "",
-      Subcategory: {} as SubCategory,
       Products: [] as Product[],
       auth: false,
       limit: 20,
@@ -111,8 +100,7 @@ export default defineComponent({
 
       console.log(subcategory);
 
-      this.Subcategory = subcategory.data.SubCategory;
-      this.Products = subcategory.data.Products;
+      this.Products = subcategory.data;
     },
     GoTo(url: string) {
       this.$router.push(url);
