@@ -34,16 +34,16 @@
       <ion-content>
         <ion-list line="inset">
           <ion-item>
-            <ion-label @click="Goto('/categories')">Categories</ion-label>
+            <ion-label @click="Goto('/categories')" class="route">Categories</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label @click="Goto('/contact')">Contact</ion-label>
+            <ion-label @click="Goto('/contact')" class="route">Contact</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label @click="Goto('/about')">About</ion-label>
+            <ion-label @click="Goto('/about')" class="route">About</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Products</ion-label>
+            <ion-label @click="Goto('/allproducts')" class="route">Products</ion-label>
           </ion-item>
           <ion-item>
             <ion-label>Login</ion-label>
@@ -117,6 +117,9 @@ export default {
 };
 </script>
 <style>
+.route {
+  cursor: pointer;
+}
 ion-menu-toggle i {
   color: #dc2626;
   font-size: 30px;

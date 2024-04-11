@@ -8,6 +8,20 @@
       :buttons="alertButtons"
     ></ion-alert>
     <ion-content>
+      <ion-select
+        placeholder="Sort By"
+        style="
+          width: 30%;
+          margin-left: 10px;
+          margin-bottom: 20px;
+          margin-top: 20px;
+        "
+        v-model="sort"
+        @ion-change="sortProducts()"
+      >
+        <ion-select-option value="hp">By Higher Price</ion-select-option>
+        <ion-select-option value="lp">By Lower Price</ion-select-option>
+      </ion-select>
       <div class="products">
         <div class="product" v-for="product in Products">
           <ion-card class="productCard" @click="GoTo(`/product/${product.id}`)">
@@ -49,6 +63,8 @@ import {
   IonAlert,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
@@ -88,6 +104,8 @@ export default defineComponent({
     IonAlert,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
+    IonSelect,
+    IonSelectOption,
   },
   data() {
     return {
@@ -99,17 +117,39 @@ export default defineComponent({
       limit: 20,
       isOpen: false,
       alertButtons: ["OK"],
+      sort: "",
     };
   },
   methods: {
+    sortProducts(sort?: string, products?: Product[]) {
+      let sortType: string | undefined = sort;
+      let product: Product[] | undefined = products;
+
+      if (!sort) {
+        sortType = this.sort;
+      }
+
+      if (!products) {
+        product = this.Products;
+      }
+
+      let arry = this.Products.sort((a, b) => {
+        if (sortType === "hp") {
+          return b.price - a.price;
+        } else if (sortType === "lp") {
+          return a.price - b.price;
+        }
+        return 0;
+      });
+
+      this.Products = arry;
+    },
     async GetCategory() {
       const id = this.$route.params.id;
 
       let subcategory = await axios.get(
         `https://h-a-stroe-backend.onrender.com/api/subcategory/${id}/${this.limit}`
       );
-
-      console.log(subcategory);
 
       this.Subcategory = subcategory.data.SubCategory;
       this.Products = subcategory.data.Products;
@@ -129,10 +169,13 @@ export default defineComponent({
     async ionInfinite(ev: any) {
       try {
         this.limit += 20;
-        let category = await axios.get(
+        let subcategory = await axios.get(
           `https://h-a-stroe-backend.onrender.com/api/subcategory/${this.$route.params.id}/${this.limit}`
         );
-        this.Products = [...this.Products, ...category.data.Products];
+        this.Products = [...this.Products, ...subcategory.data.Products];
+        let array = [...this.Products, ...subcategory.data.Products];
+        this.Products = array;
+        this.sortProducts(this.sort, array);
         setTimeout(() => ev.target.complete(), 500);
       } catch (err) {
         this.alertHeader = "No More Products";

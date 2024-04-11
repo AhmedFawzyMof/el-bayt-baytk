@@ -8,20 +8,29 @@
       :buttons="alertButtons"
     ></ion-alert>
     <ion-content>
-      <ion-select
-        placeholder="Sort By"
-        style="
-          width: 30%;
-          margin-left: 10px;
-          margin-bottom: 20px;
-          margin-top: 20px;
-        "
-        v-model="sort"
-        @ion-change="sortProducts()"
-      >
-        <ion-select-option value="hp">By Higher Price</ion-select-option>
-        <ion-select-option value="lp">By Lower Price</ion-select-option>
-      </ion-select>
+      <div class="filters">
+        <ion-select
+          placeholder="Sort By"
+          style="width: 30%; margin-bottom: 20px; margin-top: 20px"
+          v-model="sort"
+          @ion-change="sortProducts()"
+        >
+          <ion-select-option value="hp">By Higher Price</ion-select-option>
+          <ion-select-option value="lp">By Lower Price</ion-select-option>
+        </ion-select>
+        <ion-select
+          placeholder="Filter By Categories"
+          style="width: 180px; margin-bottom: 20px; margin-top: 20px"
+          v-model="filter"
+          @ion-change="filterProducts()"
+        >
+          <ion-select-option
+            v-for="category in Categories"
+            :value="category.id"
+            >{{ category.name }}</ion-select-option
+          >
+        </ion-select>
+      </div>
       <div class="products">
         <div class="product" v-for="product in Products">
           <ion-card class="productCard" @click="GoTo(`/product/${product.id}`)">
@@ -69,10 +78,19 @@ import {
 import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
 import axios from "axios";
+import { filter } from "ionicons/icons";
+
+interface Category {
+  id: number;
+  name: string;
+  nameAr: string;
+}
 
 interface Product {
   id: number;
   name: string;
+  nameAr: string;
+  category: number;
   image: string;
   price: number;
   discount: number;
@@ -81,7 +99,7 @@ interface Product {
 }
 
 export default defineComponent({
-  name: "ProductsByOffers",
+  name: "AllProducts",
   components: {
     Header,
     IonPage,
@@ -102,11 +120,13 @@ export default defineComponent({
       alertMessage: "",
       alertHeader: "",
       Products: [] as Product[],
+      Categories: [] as Category[],
       auth: false,
       limit: 20,
       isOpen: false,
       alertButtons: ["OK"],
       sort: "",
+      filter: 0,
     };
   },
   methods: {
@@ -133,14 +153,37 @@ export default defineComponent({
 
       this.Products = arry;
     },
-    async GetCategory() {
-      const id = this.$route.params.id;
 
-      let subcategory = await axios.get(
-        `https://h-a-stroe-backend.onrender.com/api/offer/${id}/${this.limit}`
+    filterProducts(filter?: number, products?: Product[]) {
+      let filterType: number | undefined = filter;
+
+      if (!filter) {
+        filterType = this.filter;
+      }
+
+      let productsInp: Product[] | undefined = products;
+
+      if (!products) {
+        productsInp = this.Products;
+      }
+
+      let arry: any = [];
+
+      if (productsInp) {
+        arry = productsInp.filter((product) => {
+          return product.category === this.filter;
+        });
+      }
+
+      this.Products = arry;
+    },
+    async GetCategory() {
+      let products = await axios.get(
+        `http://localhost:5500/api/allproducts/${this.limit}`
       );
 
-      this.Products = subcategory.data;
+      this.Products = products.data.Products;
+      this.Categories = products.data.Categories;
     },
     GoTo(url: string) {
       this.$router.push(url);
@@ -157,15 +200,16 @@ export default defineComponent({
     async ionInfinite(ev: any) {
       try {
         this.limit += 20;
-        let category = await axios.get(
-          `https://h-a-stroe-backend.onrender.com/api/offer/${this.$route.params.id}/${this.limit}`
+        let products = await axios.get(
+          `https://h-a-stroe-backend.onrender.com/api/allproducts/${this.limit}`
         );
 
-        console.log(category.data);
-        let array = [...this.Products, ...category.data];
-        this.Products = array;
-        this.sortProducts(this.sort, array);
-        this.Products = [...this.Products, ...category.data];
+        let Parray = [...this.Products, ...products.data.Products];
+        this.Products = Parray;
+        if (this.filter > 0) {
+          this.filterProducts(this.filter, Parray);
+        }
+        this.sortProducts(this.sort, Parray);
         setTimeout(() => ev.target.complete(), 500);
       } catch (err) {
         this.alertHeader = "No More Products";
@@ -182,6 +226,12 @@ export default defineComponent({
 });
 </script>
 <style>
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
 .favBtn {
   position: absolute;
   background: #fff;
