@@ -1,15 +1,15 @@
 <template>
   <ion-header :translucent="false">
     <ion-toolbar>
-      <ion-router-link href="/favorite" slot="end" class="favorite">
+      <ion-router-link @click="Goto('/favorite')" slot="end" class="favorite">
         <ion-icon :icon="heart" class="FavIcon"> </ion-icon>
       </ion-router-link>
-      <ion-router-link href="/cart" slot="end" class="cart">
+      <ion-router-link @click="Goto('/cart')" slot="end" class="cart">
         <ion-icon :icon="cart" class="CartIcon"> </ion-icon>
         <ion-badge color="primary" class="badge">2</ion-badge>
       </ion-router-link>
-      <ion-title slot="">{{ pagename }}</ion-title>
-      <ion-router-link href="/" slot="start">
+      <ion-title>{{ pagename }}</ion-title>
+      <ion-router-link @click="Goto('/')" slot="start">
         <ion-img src="/assets/icon/logo.png" class="logoImg"></ion-img>
       </ion-router-link>
     </ion-toolbar>
@@ -47,6 +47,11 @@ export default defineComponent({
       heart,
       cart,
     };
+  },
+  methods: {
+    Goto(url: string) {
+      this.$router.push(url);
+    },
   },
 });
 </script>

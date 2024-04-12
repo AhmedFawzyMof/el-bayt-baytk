@@ -179,7 +179,7 @@ export default defineComponent({
     },
     async GetCategory() {
       let products = await axios.get(
-        `http://localhost:5500/api/allproducts/${this.limit}`
+        `https://h-a-stroe-backend.onrender.com/api/allproducts/${this.limit}`
       );
 
       this.Products = products.data.Products;
